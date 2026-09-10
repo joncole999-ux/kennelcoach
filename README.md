@@ -1,0 +1,1 @@
+# KennelCoach MVP — scaffold coming
