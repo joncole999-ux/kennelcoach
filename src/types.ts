@@ -1,6 +1,6 @@
 export type Mode = 'owner' | 'transporter'
 
-export type EventType = 'Dog show' | 'Trial' | 'Other'
+export type EventType = 'Dog show' | 'Boarding' | 'Other'
 
 export type HaulStatus =
   | 'Pickup scheduled'
@@ -21,9 +21,14 @@ export const HAUL_STATUSES: HaulStatus[] = [
 
 export interface TripDraft {
   eventType: EventType
+  /** From address / place — Maps origin */
   origin: string
+  /** To address / place — Maps destination */
   destination: string
-  date: string
+  /** Required pickup / start transport date (YYYY-MM-DD) */
+  pickupDate: string
+  /** Optional dropoff / delivery date when return isn’t same-day */
+  dropoffDate: string
   petName: string
   breedSize: string
   crateRequired: boolean

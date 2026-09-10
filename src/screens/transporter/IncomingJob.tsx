@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { MILES_STUB } from '../../data'
+import { MILES_STUB, formatTripDate } from '../../data'
 import { useApp } from '../../context/AppContext'
 import { MapStub } from '../../components/MapStub'
 
@@ -17,6 +17,8 @@ export function IncomingJob() {
     nav('/transporter')
   }
 
+  const fromLabel = trip.origin.split(',')[0].trim() || trip.origin
+
   return (
     <div className="screen">
       <header className="screen-head">
@@ -28,7 +30,7 @@ export function IncomingJob() {
 
       <div className="card">
         <div className="card-title">
-          {trip.origin.split('—')[0].trim()} → venue
+          {fromLabel} → To
         </div>
         <div className="muted">
           {trip.origin} → {trip.destination}
@@ -49,6 +51,12 @@ export function IncomingJob() {
           </li>
           <li>Crate: {trip.crateRequired ? 'Required' : 'Optional'}</li>
           <li>Window: {trip.pickupWindow}</li>
+          {trip.pickupDate && (
+            <li>Pickup date: {formatTripDate(trip.pickupDate)}</li>
+          )}
+          {trip.dropoffDate && (
+            <li>Dropoff date: {formatTripDate(trip.dropoffDate)}</li>
+          )}
           {trip.specialNotes && <li>Notes: {trip.specialNotes}</li>}
         </ul>
       </div>

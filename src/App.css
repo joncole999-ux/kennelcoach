@@ -621,3 +621,16 @@ input[type='range'] {
     box-shadow: none;
   }
 }
+
+.maps-link {
+  margin: -6px 0 14px;
+}
+.maps-link a {
+  color: #c45c26;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

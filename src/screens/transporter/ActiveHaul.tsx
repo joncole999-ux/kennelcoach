@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { formatTripDate } from '../../data'
 import { useApp } from '../../context/AppContext'
 import { MapStub } from '../../components/MapStub'
 import { StatusChips } from '../../components/StatusChips'
@@ -34,9 +35,15 @@ export function ActiveHaul() {
       <StatusChips current={status} onAdvance={advanceStatus} />
 
       <div className="card soft">
-        <div className="muted small">Handoff destination</div>
-        <div>{trip.destination}</div>
+        <div className="muted small">From → To</div>
+        <div>
+          {trip.origin} → {trip.destination}
+        </div>
         <div className="muted small" style={{ marginTop: 6 }}>
+          {trip.pickupDate && <>Pickup {formatTripDate(trip.pickupDate)}</>}
+          {trip.pickupDate && trip.dropoffDate && ' · '}
+          {trip.dropoffDate && <>Dropoff {formatTripDate(trip.dropoffDate)}</>}
+          {(trip.pickupDate || trip.dropoffDate) && ' · '}
           Confirm venue staff on delivery
         </div>
       </div>

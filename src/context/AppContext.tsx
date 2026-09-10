@@ -15,9 +15,10 @@ import { MOCK_TRANSPORTER } from '../data'
 
 const defaultTrip: TripDraft = {
   eventType: 'Dog show',
-  origin: 'Home — Brooklyn, NY',
-  destination: 'Purina Farms · Gray Summit, MO',
-  date: '2026-04-11',
+  origin: '123 Atlantic Ave, Brooklyn, NY',
+  destination: 'Purina Farms, Gray Summit, MO',
+  pickupDate: '2026-04-11',
+  dropoffDate: '',
   petName: 'Scout',
   breedSize: 'Border Collie · Medium',
   crateRequired: true,

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ETA_STUB } from '../../data'
+import { ETA_STUB, formatTripDate } from '../../data'
 import { useApp } from '../../context/AppContext'
 import { MapStub } from '../../components/MapStub'
 import { StatusChips } from '../../components/StatusChips'
@@ -13,6 +13,13 @@ export function LiveHaul() {
   useEffect(() => {
     if (status === 'Delivered') nav('/owner/delivered')
   }, [status, nav])
+
+  const dateLine = [
+    trip.pickupDate ? `Pickup ${formatTripDate(trip.pickupDate)}` : null,
+    trip.dropoffDate ? `Dropoff ${formatTripDate(trip.dropoffDate)}` : null,
+  ]
+    .filter(Boolean)
+    .join(' · ')
 
   return (
     <div className="screen">
@@ -35,6 +42,7 @@ export function LiveHaul() {
         <div className="muted small" style={{ marginTop: 6 }}>
           Window {trip.pickupWindow} · Crate{' '}
           {trip.crateRequired ? 'required' : 'optional'}
+          {dateLine ? ` · ${dateLine}` : ''}
         </div>
       </div>
     </div>

@@ -1,13 +1,19 @@
 import { useNavigate } from 'react-router-dom'
-import { DESTINATIONS, ORIGINS } from '../../data'
+import { mapsDirectionsUrl } from '../../data'
 import { useApp } from '../../context/AppContext'
 import type { EventType } from '../../types'
 
-const EVENTS: EventType[] = ['Dog show', 'Trial', 'Other']
+const EVENTS: EventType[] = ['Dog show', 'Boarding', 'Other']
 
 export function TripSetup() {
   const { trip, setTrip } = useApp()
   const nav = useNavigate()
+
+  const from = trip.origin.trim()
+  const to = trip.destination.trim()
+  const canContinue = Boolean(from && to && trip.pickupDate)
+  const mapsUrl =
+    from && to ? mapsDirectionsUrl(trip.origin, trip.destination) : null
 
   return (
     <div className="screen">
@@ -36,45 +42,62 @@ export function TripSetup() {
       </label>
 
       <label className="field">
-        <span>Origin</span>
-        <select
+        <span>From</span>
+        <input
+          type="text"
+          placeholder="Pickup address or place"
           value={trip.origin}
           onChange={(e) => setTrip({ origin: e.target.value })}
-        >
-          {ORIGINS.map((o) => (
-            <option key={o} value={o}>
-              {o}
-            </option>
-          ))}
-        </select>
+          autoComplete="street-address"
+        />
       </label>
 
       <label className="field">
-        <span>Destination (venue)</span>
-        <select
+        <span>To</span>
+        <input
+          type="text"
+          placeholder="Dropoff address or place"
           value={trip.destination}
           onChange={(e) => setTrip({ destination: e.target.value })}
-        >
-          {DESTINATIONS.map((d) => (
-            <option key={d} value={d}>
-              {d}
-            </option>
-          ))}
-        </select>
+          autoComplete="street-address"
+        />
       </label>
+
+      {mapsUrl && (
+        <p className="hint maps-link">
+          <a href={mapsUrl} target="_blank" rel="noreferrer">
+            Open route in Google Maps
+          </a>
+        </p>
+      )}
 
       <label className="field">
         <span>Pickup date</span>
         <input
           type="date"
-          value={trip.date}
-          onChange={(e) => setTrip({ date: e.target.value })}
+          required
+          value={trip.pickupDate}
+          onChange={(e) => setTrip({ pickupDate: e.target.value })}
         />
+      </label>
+
+      <label className="field">
+        <span>Dropoff / delivery date (optional)</span>
+        <input
+          type="date"
+          value={trip.dropoffDate}
+          min={trip.pickupDate || undefined}
+          onChange={(e) => setTrip({ dropoffDate: e.target.value })}
+        />
+        <span className="hint muted">
+          Leave blank if delivery is same-day as pickup.
+        </span>
       </label>
 
       <button
         type="button"
         className="btn primary block"
+        disabled={!canContinue}
         onClick={() => nav('/owner/pet')}
       >
         Continue

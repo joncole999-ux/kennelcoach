@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { DURATION_STUB, MILES_STUB, PICKUP_WINDOWS } from '../../data'
+import { DURATION_STUB, MILES_STUB, PICKUP_WINDOWS, formatTripDate } from '../../data'
 import { useApp } from '../../context/AppContext'
 import { MapStub } from '../../components/MapStub'
 
@@ -17,7 +17,15 @@ export function PickupWindow() {
         <p className="muted">Choose when the transporter arrives.</p>
       </header>
 
-      <MapStub label="Origin → venue" />
+      <MapStub label="From → To" />
+
+      {(trip.pickupDate || trip.dropoffDate) && (
+        <p className="muted small" style={{ marginBottom: 12 }}>
+          {trip.pickupDate && <>Pickup {formatTripDate(trip.pickupDate)}</>}
+          {trip.pickupDate && trip.dropoffDate && ' · '}
+          {trip.dropoffDate && <>Dropoff {formatTripDate(trip.dropoffDate)}</>}
+        </p>
+      )}
 
       <div className="stats-row">
         <div className="stat">
