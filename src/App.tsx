@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppProvider } from './context/AppContext'
 import { PhoneShell } from './components/PhoneShell'
 import { OwnerHome } from './screens/owner/Home'
@@ -17,7 +17,7 @@ import './App.css'
 export default function App() {
   return (
     <AppProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route element={<PhoneShell />}>
             <Route index element={<Navigate to="/owner" replace />} />
@@ -35,7 +35,7 @@ export default function App() {
             <Route path="*" element={<Navigate to="/owner" replace />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </AppProvider>
   )
 }
