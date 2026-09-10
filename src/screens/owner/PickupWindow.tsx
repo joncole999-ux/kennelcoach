@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { DURATION_STUB, MILES_STUB, PICKUP_WINDOWS, formatTripDate } from '../../data'
+import { MILES_STUB, PICKUP_WINDOWS, formatEstDelivery, formatPickupDateTime } from '../../data'
 import { useApp } from '../../context/AppContext'
 import { MapStub } from '../../components/MapStub'
 
@@ -19,11 +19,18 @@ export function PickupWindow() {
 
       <MapStub label="From → To" />
 
-      {(trip.pickupDate || trip.dropoffDate) && (
+      {(trip.pickupDate || trip.estDeliveryLabel || trip.dropoffDate) && (
         <p className="muted small" style={{ marginBottom: 12 }}>
-          {trip.pickupDate && <>Pickup {formatTripDate(trip.pickupDate)}</>}
-          {trip.pickupDate && trip.dropoffDate && ' · '}
-          {trip.dropoffDate && <>Dropoff {formatTripDate(trip.dropoffDate)}</>}
+          {trip.pickupDate && (
+            <>Pickup {formatPickupDateTime(trip.pickupDate, trip.pickupTime)}</>
+          )}
+          {trip.pickupDate && (trip.estDeliveryLabel || trip.dropoffDate) && ' · '}
+          {(trip.estDeliveryLabel || trip.dropoffDate) && (
+            <>
+              Est. delivery{' '}
+              {formatEstDelivery(trip.estDeliveryLabel, trip.dropoffDate)}
+            </>
+          )}
         </p>
       )}
 
@@ -33,7 +40,9 @@ export function PickupWindow() {
           <div className="muted small">miles (stub)</div>
         </div>
         <div className="stat">
-          <div className="stat-val">{DURATION_STUB}</div>
+          <div className="stat-val">
+            {trip.routeDurationLabel || '—'}
+          </div>
           <div className="muted small">drive time</div>
         </div>
       </div>

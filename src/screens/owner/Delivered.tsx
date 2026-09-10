@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { formatEventLabel, formatTripDate } from '../../data'
+import { formatEstDelivery, formatEventLabel, formatPickupDateTime } from '../../data'
 import { useApp } from '../../context/AppContext'
 import { TransporterCard } from '../../components/TransporterCard'
 
@@ -39,13 +39,17 @@ export function Delivered() {
           <span>{trip.destination}</span>
         </div>
         <div className="row">
-          <span className="muted">Pickup date</span>
-          <span>{formatTripDate(trip.pickupDate) || '—'}</span>
+          <span className="muted">Pickup</span>
+          <span>
+            {formatPickupDateTime(trip.pickupDate, trip.pickupTime) || '—'}
+          </span>
         </div>
-        {trip.dropoffDate ? (
+        {trip.estDeliveryLabel || trip.dropoffDate ? (
           <div className="row">
-            <span className="muted">Dropoff date</span>
-            <span>{formatTripDate(trip.dropoffDate)}</span>
+            <span className="muted">Est. delivery</span>
+            <span>
+              {formatEstDelivery(trip.estDeliveryLabel, trip.dropoffDate)}
+            </span>
           </div>
         ) : null}
         <div className="row">

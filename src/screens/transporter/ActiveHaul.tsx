@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { formatTripDate } from '../../data'
+import { formatEstDelivery, formatPickupDateTime } from '../../data'
 import { useApp } from '../../context/AppContext'
 import { MapStub } from '../../components/MapStub'
 import { StatusChips } from '../../components/StatusChips'
@@ -40,10 +40,20 @@ export function ActiveHaul() {
           {trip.origin} → {trip.destination}
         </div>
         <div className="muted small" style={{ marginTop: 6 }}>
-          {trip.pickupDate && <>Pickup {formatTripDate(trip.pickupDate)}</>}
-          {trip.pickupDate && trip.dropoffDate && ' · '}
-          {trip.dropoffDate && <>Dropoff {formatTripDate(trip.dropoffDate)}</>}
-          {(trip.pickupDate || trip.dropoffDate) && ' · '}
+          {trip.pickupDate && (
+            <>Pickup {formatPickupDateTime(trip.pickupDate, trip.pickupTime)}</>
+          )}
+          {trip.pickupDate &&
+            (trip.estDeliveryLabel || trip.dropoffDate) &&
+            ' · '}
+          {(trip.estDeliveryLabel || trip.dropoffDate) && (
+            <>
+              Est. delivery{' '}
+              {formatEstDelivery(trip.estDeliveryLabel, trip.dropoffDate)}
+            </>
+          )}
+          {(trip.pickupDate || trip.estDeliveryLabel || trip.dropoffDate) &&
+            ' · '}
           Confirm venue staff on delivery
         </div>
       </div>

@@ -1,8 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { mapsDirectionsUrl } from '../../data'
 import { useApp } from '../../context/AppContext'
 import type { EventType } from '../../types'
+import {
+  computeArrival,
+  getRouteDuration,
+} from '../../lib/routeDuration'
 
 const EVENTS: EventType[] = ['Dog show', 'Boarding', 'Other']
 
@@ -15,12 +19,9 @@ async function reverseGeocode(lat: number, lon: number): Promise<string> {
     url.searchParams.set('lon', String(lon))
     url.searchParams.set('zoom', '18')
     url.searchParams.set('addressdetails', '0')
-    // Nominatim asks apps to identify themselves (browser can't set User-Agent)
     url.searchParams.set('email', 'joncole999@gmail.com')
     const res = await fetch(url.toString(), {
-      headers: {
-        Accept: 'application/json',
-      },
+      headers: { Accept: 'application/json' },
     })
     if (!res.ok) return fallback
     const data = (await res.json()) as { display_name?: string }
@@ -36,14 +37,87 @@ export function TripSetup() {
   const nav = useNavigate()
   const [geoBusy, setGeoBusy] = useState(false)
   const [geoError, setGeoError] = useState('')
+  const [routeBusy, setRouteBusy] = useState(false)
+  const [routeError, setRouteError] = useState('')
+  const routeSeq = useRef(0)
 
   const from = trip.origin.trim()
   const to = trip.destination.trim()
   const otherOk =
     trip.eventType !== 'Other' || Boolean(trip.eventOther.trim())
-  const canContinue = Boolean(from && to && trip.pickupDate && otherOk)
+  const canContinue = Boolean(
+    from && to && trip.pickupDate && trip.pickupTime && otherOk,
+  )
   const mapsUrl =
     from && to ? mapsDirectionsUrl(trip.origin, trip.destination) : null
+
+  // Recalculate est. delivery when From, To, or pickup date/time changes
+  useEffect(() => {
+    if (!from || !to || !trip.pickupDate || !trip.pickupTime) {
+      setRouteBusy(false)
+      setRouteError('')
+      if (
+        trip.dropoffDate ||
+        trip.estDeliveryLabel ||
+        trip.routeDurationLabel ||
+        trip.routeSource
+      ) {
+        setTrip({
+          dropoffDate: '',
+          estDeliveryLabel: '',
+          routeDurationLabel: '',
+          routeSource: '',
+        })
+      }
+      return
+    }
+
+    const seq = ++routeSeq.current
+    setRouteBusy(true)
+    setRouteError('')
+
+    const timer = window.setTimeout(async () => {
+      try {
+        const route = await getRouteDuration(from, to)
+        if (seq !== routeSeq.current) return
+        const arrival = computeArrival(
+          trip.pickupDate,
+          trip.pickupTime,
+          route.durationSeconds,
+          route.isEstimate,
+        )
+        if (!arrival) {
+          setRouteBusy(false)
+          setRouteError('Could not compute delivery from pickup time.')
+          return
+        }
+        setTrip({
+          dropoffDate: arrival.dropoffDate,
+          estDeliveryLabel: arrival.estDeliveryLabel,
+          routeDurationLabel: route.durationLabel,
+          routeSource: route.source,
+        })
+        setRouteError(route.warning || '')
+        setRouteBusy(false)
+      } catch {
+        if (seq !== routeSeq.current) return
+        setRouteBusy(false)
+        setRouteError('Route lookup failed. Try again or check addresses.')
+        setTrip({
+          dropoffDate: '',
+          estDeliveryLabel: '',
+          routeDurationLabel: '',
+          routeSource: '',
+        })
+      }
+    }, 450)
+
+    return () => {
+      window.clearTimeout(timer)
+    }
+    // setTrip is stable enough via context; include fields that drive ETA
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [from, to, trip.pickupDate, trip.pickupTime])
 
   function selectEvent(e: EventType) {
     if (e === 'Other') {
@@ -88,6 +162,15 @@ export function TripSetup() {
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 },
     )
   }
+
+  const sourceHint =
+    trip.routeSource === 'google'
+      ? 'From Google Maps drive time'
+      : trip.routeSource === 'osrm'
+        ? 'From OpenStreetMap routing (OSRM)'
+        : trip.routeSource === 'estimate'
+          ? 'Fallback estimate — not live routing'
+          : ''
 
   return (
     <div className="screen">
@@ -205,33 +288,66 @@ export function TripSetup() {
         </p>
       )}
 
-      <label className="field">
-        <span>Pickup date</span>
-        <input
-          type="date"
-          required
-          value={trip.pickupDate}
-          onChange={(e) => setTrip({ pickupDate: e.target.value })}
-        />
-      </label>
+      <div className="field-row">
+        <label className="field">
+          <span>Pickup date</span>
+          <input
+            type="date"
+            required
+            value={trip.pickupDate}
+            onChange={(e) => setTrip({ pickupDate: e.target.value })}
+          />
+        </label>
+        <label className="field">
+          <span>Pickup time</span>
+          <input
+            type="time"
+            required
+            value={trip.pickupTime}
+            onChange={(e) => setTrip({ pickupTime: e.target.value })}
+          />
+        </label>
+      </div>
 
-      <label className="field">
-        <span>Dropoff / delivery date (optional)</span>
-        <input
-          type="date"
-          value={trip.dropoffDate}
-          min={trip.pickupDate || undefined}
-          onChange={(e) => setTrip({ dropoffDate: e.target.value })}
-        />
-        <span className="hint muted">
-          Leave blank if delivery is same-day as pickup.
-        </span>
-      </label>
+      <div className="field">
+        <span>Est. delivery</span>
+        <div
+          className="readonly-box"
+          aria-live="polite"
+          aria-busy={routeBusy}
+        >
+          {routeBusy ? (
+            <span className="muted">Calculating route…</span>
+          ) : trip.estDeliveryLabel ? (
+            <>
+              <strong>{trip.estDeliveryLabel}</strong>
+              {trip.routeDurationLabel && (
+                <span className="muted small">
+                  {' '}
+                  · {trip.routeDurationLabel} drive
+                </span>
+              )}
+            </>
+          ) : (
+            <span className="muted">
+              Enter From, To, and pickup to estimate arrival
+            </span>
+          )}
+        </div>
+        {sourceHint && !routeBusy && trip.estDeliveryLabel && (
+          <span className="hint muted">{sourceHint}</span>
+        )}
+        {routeError && (
+          <span className="hint field-error" role="alert">
+            {routeError}
+          </span>
+        )}
+      </div>
 
       <button
         type="button"
         className="btn primary block"
-        disabled={!canContinue}
+        disabled={!canContinue || routeBusy}
         onClick={() => nav('/owner/pet')}
       >
         Continue

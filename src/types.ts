@@ -29,8 +29,16 @@ export interface TripDraft {
   destination: string
   /** Required pickup / start transport date (YYYY-MM-DD) */
   pickupDate: string
-  /** Optional dropoff / delivery date when return isn’t same-day */
+  /** Pickup clock time HH:mm (local) — used with route duration for ETA */
+  pickupTime: string
+  /** Derived dropoff / delivery date (YYYY-MM-DD) from route + pickup */
   dropoffDate: string
+  /** Read-only display label for estimated delivery (Maps/OSRM/estimate) */
+  estDeliveryLabel: string
+  /** Drive duration label e.g. "12 hr 40 min" */
+  routeDurationLabel: string
+  /** google | osrm | estimate | empty */
+  routeSource: string
   petName: string
   breedSize: string
   crateRequired: boolean
@@ -53,7 +61,9 @@ export interface CompletedRide {
   origin: string
   destination: string
   pickupDate: string
+  pickupTime: string
   dropoffDate: string
+  estDeliveryLabel: string
   petName: string
   breedSize: string
   crateRequired: boolean

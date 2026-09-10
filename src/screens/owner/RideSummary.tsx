@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { formatEventLabel, formatTripDate } from '../../data'
+import { formatEstDelivery, formatEventLabel, formatPickupDateTime } from '../../data'
 import { useApp } from '../../context/AppContext'
 
 export function RideSummary() {
@@ -74,13 +74,18 @@ export function RideSummary() {
           <span>{ride.destination}</span>
         </div>
         <div className="row">
-          <span className="muted">Pickup date</span>
-          <span>{formatTripDate(ride.pickupDate) || ride.pickupDate}</span>
+          <span className="muted">Pickup</span>
+          <span>
+            {formatPickupDateTime(ride.pickupDate, ride.pickupTime) ||
+              ride.pickupDate}
+          </span>
         </div>
-        {ride.dropoffDate ? (
+        {ride.estDeliveryLabel || ride.dropoffDate ? (
           <div className="row">
-            <span className="muted">Dropoff date</span>
-            <span>{formatTripDate(ride.dropoffDate)}</span>
+            <span className="muted">Est. delivery</span>
+            <span>
+              {formatEstDelivery(ride.estDeliveryLabel, ride.dropoffDate)}
+            </span>
           </div>
         ) : null}
         <div className="row">

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { MILES_STUB, formatTripDate, formatEventLabel } from '../../data'
+import { MILES_STUB, formatEstDelivery, formatEventLabel, formatPickupDateTime } from '../../data'
 import { useApp } from '../../context/AppContext'
 import { MapStub } from '../../components/MapStub'
 
@@ -52,10 +52,16 @@ export function IncomingJob() {
           <li>Crate: {trip.crateRequired ? 'Required' : 'Optional'}</li>
           <li>Window: {trip.pickupWindow}</li>
           {trip.pickupDate && (
-            <li>Pickup date: {formatTripDate(trip.pickupDate)}</li>
+            <li>
+              Pickup:{' '}
+              {formatPickupDateTime(trip.pickupDate, trip.pickupTime)}
+            </li>
           )}
-          {trip.dropoffDate && (
-            <li>Dropoff date: {formatTripDate(trip.dropoffDate)}</li>
+          {(trip.estDeliveryLabel || trip.dropoffDate) && (
+            <li>
+              Est. delivery:{' '}
+              {formatEstDelivery(trip.estDeliveryLabel, trip.dropoffDate)}
+            </li>
           )}
           {trip.specialNotes && <li>Notes: {trip.specialNotes}</li>}
         </ul>

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ETA_STUB, formatTripDate } from '../../data'
+import { formatEstDelivery, formatPickupDateTime } from '../../data'
 import { useApp } from '../../context/AppContext'
 import { MapStub } from '../../components/MapStub'
 import { StatusChips } from '../../components/StatusChips'
@@ -14,9 +14,12 @@ export function LiveHaul() {
     if (status === 'Delivered') nav('/owner/delivered')
   }, [status, nav])
 
+  const est = formatEstDelivery(trip.estDeliveryLabel, trip.dropoffDate)
   const dateLine = [
-    trip.pickupDate ? `Pickup ${formatTripDate(trip.pickupDate)}` : null,
-    trip.dropoffDate ? `Dropoff ${formatTripDate(trip.dropoffDate)}` : null,
+    trip.pickupDate
+      ? `Pickup ${formatPickupDateTime(trip.pickupDate, trip.pickupTime)}`
+      : null,
+    est ? `Est. delivery ${est}` : null,
   ]
     .filter(Boolean)
     .join(' · ')
@@ -26,7 +29,8 @@ export function LiveHaul() {
       <header className="screen-head">
         <h1>Live haul</h1>
         <p className="muted">
-          {trip.petName} · ETA {ETA_STUB}
+          {trip.petName}
+          {est ? ` · ETA ${est}` : ''}
         </p>
       </header>
 
