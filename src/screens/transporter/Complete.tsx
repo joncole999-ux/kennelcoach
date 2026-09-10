@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { MILES_STUB } from '../../data'
+import { MILES_STUB, formatEventLabel } from '../../data'
 import { useApp } from '../../context/AppContext'
 
 export function Complete() {
@@ -41,7 +41,7 @@ export function Complete() {
         </div>
         <div className="row">
           <span className="muted">Event</span>
-          <span>{trip.eventType}</span>
+          <span>{formatEventLabel(trip.eventType, trip.eventOther)}</span>
         </div>
         <div className="row">
           <span className="muted">Payout</span>

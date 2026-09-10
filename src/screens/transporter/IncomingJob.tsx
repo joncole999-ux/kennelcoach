@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { MILES_STUB, formatTripDate } from '../../data'
+import { MILES_STUB, formatTripDate, formatEventLabel } from '../../data'
 import { useApp } from '../../context/AppContext'
 import { MapStub } from '../../components/MapStub'
 
@@ -41,7 +41,7 @@ export function IncomingJob() {
             <div className="muted small">miles</div>
           </div>
           <div className="stat">
-            <div className="stat-val">{trip.eventType}</div>
+            <div className="stat-val">{formatEventLabel(trip.eventType, trip.eventOther)}</div>
             <div className="muted small">event</div>
           </div>
         </div>

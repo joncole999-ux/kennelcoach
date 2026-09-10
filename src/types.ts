@@ -21,6 +21,8 @@ export const HAUL_STATUSES: HaulStatus[] = [
 
 export interface TripDraft {
   eventType: EventType
+  /** Free-text when eventType is Other */
+  eventOther: string
   /** From address / place — Maps origin */
   origin: string
   /** To address / place — Maps destination */

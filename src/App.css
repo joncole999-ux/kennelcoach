@@ -308,6 +308,55 @@
   color: #a8481a;
 }
 
+.input-with-action {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.input-with-action input {
+  flex: 1;
+  min-width: 0;
+}
+
+.geo-btn {
+  flex-shrink: 0;
+  width: 44px;
+  border: 1.5px solid #e0cbb6;
+  border-radius: 12px;
+  background: #fff;
+  color: #c45c26;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.geo-btn:hover:not(:disabled) {
+  border-color: #c45c26;
+  background: #fff0e6;
+}
+
+.geo-btn:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.geo-busy {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.compass-icon {
+  display: block;
+}
+
+.field-error {
+  color: #b42318;
+  font-weight: 500;
+}
+
 .toggle-row {
   display: flex;
   align-items: center;

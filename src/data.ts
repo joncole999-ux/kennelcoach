@@ -72,3 +72,15 @@ export function formatTripDate(iso: string): string {
     day: 'numeric',
   })
 }
+
+/** Display label for trip event type (includes Other custom text). */
+export function formatEventLabel(
+  eventType: string,
+  eventOther: string,
+): string {
+  if (eventType === 'Other') {
+    const t = eventOther.trim()
+    return t ? `Other: ${t}` : 'Other'
+  }
+  return eventType
+}

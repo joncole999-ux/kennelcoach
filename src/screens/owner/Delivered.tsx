@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { formatTripDate } from '../../data'
+import { formatEventLabel, formatTripDate } from '../../data'
 import { useApp } from '../../context/AppContext'
 import { TransporterCard } from '../../components/TransporterCard'
 
@@ -19,7 +19,7 @@ export function Delivered() {
       <div className="card summary">
         <div className="row">
           <span className="muted">Event</span>
-          <span>{trip.eventType}</span>
+          <span>{formatEventLabel(trip.eventType, trip.eventOther)}</span>
         </div>
         <div className="row">
           <span className="muted">From</span>
