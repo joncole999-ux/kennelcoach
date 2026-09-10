@@ -1,11 +1,20 @@
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { formatEventLabel, formatTripDate } from '../../data'
 import { useApp } from '../../context/AppContext'
 import { TransporterCard } from '../../components/TransporterCard'
 
 export function Delivered() {
-  const { trip, rating, setRating, transporter, resetTrip } = useApp()
+  const { trip, rating, setRating, transporter, resetTrip, recordCompletedRide } =
+    useApp()
   const nav = useNavigate()
+  const recorded = useRef(false)
+
+  useEffect(() => {
+    if (recorded.current) return
+    recorded.current = true
+    recordCompletedRide()
+  }, [recordCompletedRide])
 
   return (
     <div className="screen">

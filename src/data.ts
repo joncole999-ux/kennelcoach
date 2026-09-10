@@ -1,4 +1,4 @@
-import type { TransporterProfile, UpcomingEvent } from './types'
+import type { CompletedRide, FavoritePlace, PetProfile, TransporterProfile } from './types'
 
 export const MOCK_TRANSPORTER: TransporterProfile = {
   name: 'Maya R.',
@@ -32,18 +32,89 @@ export const PICKUP_WINDOWS = [
   'Fri 6–8 AM',
 ]
 
-export const UPCOMING: UpcomingEvent[] = [
+/** Seeded completed hauls for owner Home → Previous rides */
+export const MOCK_PREVIOUS_RIDES: CompletedRide[] = [
   {
-    id: '1',
-    title: 'Spring Spaniel Specialty',
-    date: 'Sat · Apr 12',
-    venue: 'Purina Farms',
+    id: 'ride-1',
+    eventType: 'Dog show',
+    eventOther: '',
+    origin: '123 Atlantic Ave, Brooklyn, NY',
+    destination: 'Purina Farms, Gray Summit, MO',
+    pickupDate: '2026-03-14',
+    dropoffDate: '2026-03-15',
+    petName: 'Scout',
+    breedSize: 'Border Collie · Medium',
+    crateRequired: true,
+    specialNotes: '',
+    pickupWindow: 'Thu 6–8 AM',
+    status: 'Delivered',
   },
   {
-    id: '2',
-    title: 'Weekend boarding drop-off',
-    date: 'Sun · May 4',
-    venue: 'Hound Hollow',
+    id: 'ride-2',
+    eventType: 'Boarding',
+    eventOther: '',
+    origin: '123 Atlantic Ave, Brooklyn, NY',
+    destination: 'Hound Hollow Boarding Kennels, VA',
+    pickupDate: '2026-02-01',
+    dropoffDate: '2026-02-01',
+    petName: 'Scout',
+    breedSize: 'Border Collie · Medium',
+    crateRequired: true,
+    specialNotes: 'Needs evening meds',
+    pickupWindow: 'Fri 6–8 AM',
+    status: 'Delivered',
+  },
+  {
+    id: 'ride-3',
+    eventType: 'Other',
+    eventOther: 'Agility trial',
+    origin: '4500 Guadalupe St, Austin, TX',
+    destination: 'Orlando Dog Training Center, Orlando, FL',
+    pickupDate: '2025-11-08',
+    dropoffDate: '2025-11-09',
+    petName: 'Scout',
+    breedSize: 'Border Collie · Medium',
+    crateRequired: true,
+    specialNotes: '',
+    pickupWindow: 'Thu 8–10 AM',
+    status: 'Delivered',
+  },
+]
+
+/** Seeded saved places (venues / addresses — not transporters) */
+export const MOCK_FAVORITES: FavoritePlace[] = [
+  {
+    id: 'fav-1',
+    label: 'Purina Farms',
+    address: 'Purina Farms, Gray Summit, MO',
+  },
+  {
+    id: 'fav-2',
+    label: 'Home · Brooklyn',
+    address: '123 Atlantic Ave, Brooklyn, NY',
+  },
+]
+
+
+/** Seeded pets for owner Home → Your pets */
+export const MOCK_PETS: PetProfile[] = [
+  {
+    id: 'pet-1',
+    name: 'Scout',
+    breed: 'Border Collie',
+    height: '20 in',
+    weight: '38 lb',
+    fixed: true,
+    photoDataUrl: '',
+  },
+  {
+    id: 'pet-2',
+    name: 'Maple',
+    breed: 'Beagle',
+    height: '14 in',
+    weight: '24 lb',
+    fixed: false,
+    photoDataUrl: '',
   },
 ]
 
@@ -83,4 +154,11 @@ export function formatEventLabel(
     return t ? `Other: ${t}` : 'Other'
   }
   return eventType
+}
+
+/** Short place label for list rows (first comma segment, truncated). */
+export function shortPlace(addr: string, max = 26): string {
+  const part = (addr.split(',')[0] || addr).trim()
+  if (part.length <= max) return part
+  return `${part.slice(0, max - 1)}…`
 }

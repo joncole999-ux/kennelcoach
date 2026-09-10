@@ -46,11 +46,26 @@ export interface TransporterProfile {
   photoInitials: string
 }
 
-export interface UpcomingEvent {
+export interface CompletedRide {
   id: string
-  title: string
-  date: string
-  venue: string
+  eventType: EventType
+  eventOther: string
+  origin: string
+  destination: string
+  pickupDate: string
+  dropoffDate: string
+  petName: string
+  breedSize: string
+  crateRequired: boolean
+  specialNotes: string
+  pickupWindow: string
+  status: 'Delivered'
+}
+
+export interface FavoritePlace {
+  id: string
+  label: string
+  address: string
 }
 
 export interface TransporterPrefs {
@@ -58,3 +73,15 @@ export interface TransporterPrefs {
   maxDistance: number
   crateSizes: string[]
 }
+
+export interface PetProfile {
+  id: string
+  name: string
+  breed: string
+  height: string
+  weight: string
+  fixed: boolean
+  /** data URL or empty for initials avatar */
+  photoDataUrl: string
+}
+

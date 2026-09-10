@@ -8,6 +8,8 @@ import { PickupWindow } from './screens/owner/PickupWindow'
 import { Matching } from './screens/owner/Matching'
 import { LiveHaul } from './screens/owner/LiveHaul'
 import { Delivered } from './screens/owner/Delivered'
+import { RideSummary } from './screens/owner/RideSummary'
+import { AddPet } from './screens/owner/AddPet'
 import { GoOnline } from './screens/transporter/GoOnline'
 import { IncomingJob } from './screens/transporter/IncomingJob'
 import { ActiveHaul } from './screens/transporter/ActiveHaul'
@@ -24,10 +26,12 @@ export default function App() {
             <Route path="owner" element={<OwnerHome />} />
             <Route path="owner/trip" element={<TripSetup />} />
             <Route path="owner/pet" element={<PetCrate />} />
+            <Route path="owner/pets/new" element={<AddPet />} />
             <Route path="owner/pickup" element={<PickupWindow />} />
             <Route path="owner/matching" element={<Matching />} />
             <Route path="owner/live" element={<LiveHaul />} />
             <Route path="owner/delivered" element={<Delivered />} />
+            <Route path="owner/rides/:id" element={<RideSummary />} />
             <Route path="transporter" element={<GoOnline />} />
             <Route path="transporter/job" element={<IncomingJob />} />
             <Route path="transporter/active" element={<ActiveHaul />} />

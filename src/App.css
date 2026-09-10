@@ -683,3 +683,246 @@ input[type='range'] {
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+/* Owner Home — previous rides & favorites */
+.tap-card {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  display: block;
+}
+
+.tap-card:hover {
+  border-color: #d4a882;
+  box-shadow: 0 2px 10px rgba(92, 46, 20, 0.08);
+}
+
+.route-line {
+  margin: 2px 0 8px;
+}
+
+.row-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.status-pill.delivered {
+  background: #e4f5e8;
+  color: #1f6b3a;
+}
+
+.section-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.section-head-row h2 {
+  margin: 0;
+}
+
+.link-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  color: #c45c26;
+  font-weight: 650;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.link-btn.danger {
+  color: #8a6a52;
+  font-weight: 550;
+  font-size: 0.78rem;
+}
+
+.empty-copy {
+  margin: 0 0 4px;
+  line-height: 1.4;
+}
+
+.fav-card .fav-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.add-fav-form {
+  margin-bottom: 12px;
+}
+
+.add-fav-form .field {
+  margin-bottom: 10px;
+}
+
+.fav-save-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.fav-save-row .btn {
+  flex: 1;
+}
+
+
+/* Your pets chips */
+.pet-chip-row {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pet-chip {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 148px;
+  max-width: 200px;
+  background: #fff;
+  border: 1px solid #edd9c6;
+  border-radius: 16px;
+  padding: 10px 12px;
+}
+
+.pet-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4682e, #b84818);
+  color: #fffaf5;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.pet-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pet-chip-meta {
+  min-width: 0;
+}
+
+.pet-chip-meta .card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pet-chip-meta .muted {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Sticky Book a haul footer on Home */
+.home-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding-bottom: 0;
+}
+
+.home-scroll {
+  flex: 1;
+  padding-bottom: 12px;
+}
+
+.home-footer {
+  position: sticky;
+  bottom: 0;
+  margin: 0 -16px -24px;
+  padding: 12px 16px 20px;
+  background: linear-gradient(180deg, rgba(255, 250, 245, 0) 0%, #fffaf5 28%);
+  z-index: 3;
+}
+
+/* Add pet screen */
+.pet-photo-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.pet-photo-picker {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  border: 2px dashed #d4a882;
+  background: #faf1e7;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pet-photo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.pet-photo-plus {
+  font-size: 1.4rem;
+}
+
+.pet-photo-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
